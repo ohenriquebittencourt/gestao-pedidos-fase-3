@@ -4,6 +4,7 @@ provider "aws" {
 
 provider "kubernetes" {
   host  = "https://1FC52356DA6E21E0390E97776718260C.gr7.us-east-2.eks.amazonaws.com"
+  cluster_ca_certificate = file("src/ca_certificate.pem")
 }
 
 data "kubernetes_secret" "cluster_ca" {
@@ -12,12 +13,6 @@ data "kubernetes_secret" "cluster_ca" {
     namespace = "kube-system"
   }
 }
-
-provider "kubernetes" {
-  alias                   = "use_ca"
-  cluster_ca_certificate = base64decode(data.kubernetes_secret.cluster_ca.data["ca.crt"])
-}
-
 
 resource "kubernetes_deployment" "my_api_deployment" {
   metadata {
