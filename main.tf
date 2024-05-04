@@ -2,6 +2,13 @@ provider "aws" {
   region = "us-east-2"
 }
 
+data "kubernetes_secret" "cluster_ca" {
+  metadata {
+    name      = "default-token"
+    namespace = "kube-system"
+  }
+}
+
 provider "kubernetes" {
   host  = "https://1FC52356DA6E21E0390E97776718260C.gr7.us-east-2.eks.amazonaws.com"
   cluster_ca_certificate = base64decode(data.kubernetes_secret.cluster_ca.data["ca.crt"])
