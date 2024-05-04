@@ -14,6 +14,7 @@ data "kubernetes_secret" "cluster_ca" {
 }
 
 provider "kubernetes" {
+  alias                   = "use_ca"
   cluster_ca_certificate = base64decode(data.kubernetes_secret.cluster_ca.data["ca.crt"])
 }
 
